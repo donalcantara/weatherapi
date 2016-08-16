@@ -21,11 +21,23 @@
             var html_str = "";
             html_str += "<h2>" + res.name + ", " + res.sys.country + "</h2>";
             html_str += "<h4>" + res.weather[0].main + "</h4>";
-            html_str += "<h3>Temperature</h3>";
-            html_str += "<h4>"+ temperature + "<sup>o</sup> F" + "</h4>";
+            html_str += "<h3>High:</h3>";
+            html_str += "<h4>"+ high + "<sup>o</sup> F" + "</h4>";
+            html_str += "<h3>Low:</h3>";
+            html_str += "<h4>"+ low + "<sup>o</sup> F" + "</h4>";
             html_str += "<h3>Humidity</h3>";
             html_str += "<h4>"+res.main.humidity+"%</h4>";
             $('#weather').html(html_str);
+            }, "json");   
+        return false;
+    });
+});
+    $(document).ready(function() {
+      $('form').submit(function() {
+        var location = $('.name').val();
+        $.get('http://api.openweathermap.org/data/2.5/forecast?q='+location+'&appid=32c80b51f70441a1881607059a1a6a9b', function(res) {
+          console.log(res);
+            $('#weather').html();
             }, "json");   
         return false;
     });
