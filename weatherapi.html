@@ -17,12 +17,14 @@
           var temp = res.main.temp*(9/5)-459.67;
           var high = res.main.temp_max*(9/5)-459.67;
           var low = res.main.temp_min*(9/5)-459.67;
+          var d = Date();
           high = high.toFixed(0);
           low = low.toFixed(0);
           temp = temp.toFixed(0);
             var html_str = "";
             html_str += "<h2>" + res.name + ", " + res.sys.country + "</h2>";
             html_str += "<h4>" + res.weather[0].main + "</h4>";
+            html_str += d;
             html_str += "<h3>Current Temperature:</h3>";
             html_str += "<h4>"+ temp + "<sup>o</sup> F" + "</h4>";
             if (temp>80) {
@@ -44,7 +46,8 @@
         var location = $('.name').val();
         $.get('http://api.openweathermap.org/data/2.5/forecast?q='+location+'&appid=32c80b51f70441a1881607059a1a6a9b', function(res) {
           console.log(res);
-            $('#weather').html();
+            var strang = "";
+            $('#strang').html(strang);
             }, "json");   
         return false;
     });
@@ -63,6 +66,7 @@
     <button type="submit" class="btn btn-default">Search Weather</button>
   </form>
 <div id="weather">
+<div id="strang">
 </div>
 </div>
 </body>
