@@ -10,9 +10,21 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   	<script>
-		$(document).ready(function() { //jQuery dot ready function (once the document is ready)
-    	$('form').submit(function() { //once the 'form' submit button is clicked
-    		var location = $('.name').val(); //set the location variable to the value in the '.name' input box
+      $(document).ready(function() {
+        $('form').submit(function() {
+          var loc = $('.name').val();
+          $.get('https://maps.googleapis.com/maps/api/geocode/json?address='+loc+'&key=AIzaSyCx6PvJYsRnm8-nLZwMJiuFmX5Drqvj52w', function(res) {
+            console.log(res);
+              var strang = "";
+              strang += res.results.geometry.location.lat;
+              $('#strang').html(strang);
+              }, "json");   
+          return false;
+        });
+      });
+  $(document).ready(function() { //jQuery dot ready function (once the document is ready)
+    $('form').submit(function() { //once the 'form' submit button is clicked
+        var location = $('.name').val(); //set the location variable to the value in the '.name' input box
         $.get('http://api.openweathermap.org/data/2.5/weather?q='+location+'&appid=32c80b51f70441a1881607059a1a6a9b', function(res) {
           // .get sends a request to the weather api with the location variable as the city
         	console.log(res); //console log the response recieved
@@ -30,34 +42,38 @@
             if (res.weather[0].main == "Clouds") { //function to show a sun or clouds
               html_str += '<img src="img/cloudy.png">';
             }
+            if (res.weather[0].main == "Rain") { //function to show a sun or clouds
+              html_str += '<img src="img/rainy.png">';
+            }
+            if (res.weather[0].main == "Clear") { //function to show a sun or clouds
+              html_str += '<img src="img/clear.png">';
+            }
             html_str += "<h3>Current Temperature:</h3>"; //creates and H3 element
             html_str += "<h4>"+ temp + "<sup>o</sup> F" + "</h4>"; //the temp plus the farenheit sign
             if (temp>80) { //function to show a sun or clouds
               html_str += '<img src="img/hot.png">';
             }
-            html_str += "<h3>High:</h3>";
-            html_str += "<h4>"+ high + "<sup>o</sup> F" + "</h4>";
-            html_str += "<h3>Low:</h3>";
-            html_str += "<h4>"+ low + "<sup>o</sup> F" + "</h4>";
-            html_str += "<h3>Humidity:</h3>";
-            html_str += "<h4>"+res.main.humidity+"%</h4>";
+            if (temp<60) { //function to show a sun or clouds
+              html_str += '<img src="img/cold.png">';
+            }
+            html_str += "<h3>High: "+ high + "<sup>o</sup> F" + "</h3>";
+            html_str += "<h3>Low: " + low + "<sup>o</sup> F" + "</h3>";
+            html_str += "<h3>Humidity: "+res.main.humidity+"%</h4>";
             $('#weather').html(html_str);
             }, "json");   
         return false;
     });
-});
-    $(document).ready(function() {
-      $('form').submit(function() {
-        var location = $('.name').val();
-        $.get('http://api.openweathermap.org/data/2.5/forecast?q='+location+'&appid=32c80b51f70441a1881607059a1a6a9b', function(res) {
-          console.log(res);
-            var strang = "";
-            $('#strang').html(strang);
-            }, "json");   
-        return false;
-    });
-});
+  });
 		</script>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+      }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -70,6 +86,7 @@
     </div>
     <button type="submit" class="btn btn-default">Search Weather</button>
   </form>
+<div id="map"></div>
 <div id="weather">
 <div id="strang">
 </div>
